@@ -20,6 +20,8 @@ export default function Auth() {
   const [role, setRole] = useState<UserRole>('customer');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
+  const [showRoleSelection, setShowRoleSelection] = useState(false);
+  const [tempGoogleUser, setTempGoogleUser] = useState<any>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,20 +48,58 @@ export default function Auth() {
 
     storage.setUser(user);
     toast.success('Welcome to ShopHub!');
-    navigate('/');
+    requestLocationAccess();
   };
 
   const handleGoogleLogin = () => {
-    // Mock Google OAuth
-    const user = {
+    // Mock Google OAuth - show role selection
+    setTempGoogleUser({
       id: Math.random().toString(36).substr(2, 9),
       name: 'Google User',
       email: 'user@gmail.com',
-      role: 'customer' as UserRole,
+    });
+    setShowRoleSelection(true);
+  };
+
+  const handleFacebookLogin = () => {
+    // Mock Facebook OAuth - show role selection
+    setTempGoogleUser({
+      id: Math.random().toString(36).substr(2, 9),
+      name: 'Facebook User',
+      email: 'user@facebook.com',
+    });
+    setShowRoleSelection(true);
+  };
+
+  const handleRoleSelect = () => {
+    const user = {
+      ...tempGoogleUser,
+      role,
     };
     storage.setUser(user);
-    toast.success('Signed in with Google!');
-    navigate('/');
+    requestLocationAccess();
+  };
+
+  const requestLocationAccess = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          localStorage.setItem('userLocation', JSON.stringify(location));
+          toast.success('Location access granted!');
+          navigate('/');
+        },
+        () => {
+          toast.info('Location access denied. Using default location.');
+          navigate('/');
+        }
+      );
+    } else {
+      navigate('/');
+    }
   };
 
   return (
@@ -77,7 +117,41 @@ export default function Auth() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {showRoleSelection ? (
+            <div className="space-y-4">
+              <div className="text-center mb-4">
+                <h3 className="font-semibold text-lg">Select Your Account Type</h3>
+                <p className="text-sm text-muted-foreground">Choose how you'll use ShopHub</p>
+              </div>
+              <RadioGroup value={role} onValueChange={(v) => setRole(v as UserRole)}>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="customer" id="customer-social" />
+                  <Label htmlFor="customer-social" className="font-normal cursor-pointer flex-1">
+                    <div className="font-medium">Customer</div>
+                    <div className="text-xs text-muted-foreground">Browse and buy products</div>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="retailer" id="retailer-social" />
+                  <Label htmlFor="retailer-social" className="font-normal cursor-pointer flex-1">
+                    <div className="font-medium">Retailer</div>
+                    <div className="text-xs text-muted-foreground">Sell products to customers</div>
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="wholesaler" id="wholesaler-social" />
+                  <Label htmlFor="wholesaler-social" className="font-normal cursor-pointer flex-1">
+                    <div className="font-medium">Wholesaler</div>
+                    <div className="text-xs text-muted-foreground">Supply products in bulk</div>
+                  </Label>
+                </div>
+              </RadioGroup>
+              <Button onClick={handleRoleSelect} className="w-full">
+                Continue
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
             {isSignUp && !otpSent && (
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -120,25 +194,28 @@ export default function Auth() {
             )}
 
             {isSignUp && !otpSent && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <Label>Account Type</Label>
                 <RadioGroup value={role} onValueChange={(v) => setRole(v as UserRole)}>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
                     <RadioGroupItem value="customer" id="customer" />
-                    <Label htmlFor="customer" className="font-normal cursor-pointer">
-                      Customer
+                    <Label htmlFor="customer" className="font-normal cursor-pointer flex-1">
+                      <div className="font-medium">Customer</div>
+                      <div className="text-xs text-muted-foreground">Browse and buy products</div>
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
                     <RadioGroupItem value="retailer" id="retailer" />
-                    <Label htmlFor="retailer" className="font-normal cursor-pointer">
-                      Retailer
+                    <Label htmlFor="retailer" className="font-normal cursor-pointer flex-1">
+                      <div className="font-medium">Retailer</div>
+                      <div className="text-xs text-muted-foreground">Sell products to customers</div>
                     </Label>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
                     <RadioGroupItem value="wholesaler" id="wholesaler" />
-                    <Label htmlFor="wholesaler" className="font-normal cursor-pointer">
-                      Wholesaler
+                    <Label htmlFor="wholesaler" className="font-normal cursor-pointer flex-1">
+                      <div className="font-medium">Wholesaler</div>
+                      <div className="text-xs text-muted-foreground">Supply products in bulk</div>
                     </Label>
                   </div>
                 </RadioGroup>
@@ -166,8 +243,9 @@ export default function Auth() {
               {otpSent ? 'Verify OTP' : isSignUp ? 'Send OTP' : 'Sign In'}
             </Button>
           </form>
+          )}
 
-          {!otpSent && (
+          {!otpSent && !showRoleSelection && (
             <>
               <div className="relative">
                 <Separator />
@@ -201,6 +279,18 @@ export default function Auth() {
                   />
                 </svg>
                 Sign in with Google
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleFacebookLogin}
+              >
+                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Sign in with Facebook
               </Button>
 
               <div className="text-center text-sm">

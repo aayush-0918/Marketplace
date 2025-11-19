@@ -64,7 +64,7 @@ export default function Checkout() {
     toast.success('Email confirmation sent!');
     
     if (paymentMethod === 'online') {
-      navigate('/payment', { state: { orderId: order.id } });
+      navigate('/payment', { state: { orderId: order.id, total: order.total } });
     } else {
       toast.success('Order placed successfully!');
       navigate('/orders');

@@ -4,15 +4,21 @@ import { Navbar } from '@/components/Navbar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Package, Truck, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Package, Truck, CheckCircle, XCircle, Clock, Star } from 'lucide-react';
 import { storage } from '@/lib/storage';
 import { Order } from '@/types';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 
 export default function Orders() {
   const navigate = useNavigate();
   const user = storage.getUser();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [feedbackOrderId, setFeedbackOrderId] = useState<string | null>(null);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     if (!user) {
@@ -54,6 +60,30 @@ export default function Orders() {
       default:
         return 'default';
     }
+  };
+
+  const handleSubmitFeedback = (orderId: string, productId: string) => {
+    if (!user || rating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+
+    const feedback = {
+      id: Math.random().toString(36).substr(2, 9),
+      productId,
+      userId: user.id,
+      userName: user.name,
+      rating,
+      comment,
+      createdAt: new Date().toISOString(),
+    };
+
+    storage.addFeedback(feedback);
+    
+    toast.success('Feedback submitted!');
+    setFeedbackOrderId(null);
+    setRating(0);
+    setComment('');
   };
 
   if (orders.length === 0) {
@@ -148,6 +178,77 @@ export default function Orders() {
                       </div>
                     </div>
                   </div>
+
+                  {order.status === 'delivered' && (
+                    <div className="mt-4 pt-4 border-t">
+                      {feedbackOrderId === order.id ? (
+                        <div className="space-y-4">
+                          <div>
+                            <Label className="text-sm font-medium mb-2">Rate your experience</Label>
+                            <div className="flex gap-2">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                  key={star}
+                                  type="button"
+                                  onClick={() => setRating(star)}
+                                  className="focus:outline-none"
+                                >
+                                  <Star
+                                    className={`h-6 w-6 ${
+                                      star <= rating
+                                        ? 'fill-yellow-400 text-yellow-400'
+                                        : 'text-muted-foreground'
+                                    }`}
+                                  />
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div>
+                            <Label htmlFor={`comment-${order.id}`} className="text-sm font-medium">
+                              Your feedback
+                            </Label>
+                            <Textarea
+                              id={`comment-${order.id}`}
+                              value={comment}
+                              onChange={(e) => setComment(e.target.value)}
+                              placeholder="Tell us about your experience..."
+                              className="mt-2"
+                              rows={3}
+                            />
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => handleSubmitFeedback(order.id, order.items[0].product.id)}
+                              size="sm"
+                            >
+                              Submit Feedback
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setFeedbackOrderId(null);
+                                setRating(0);
+                                setComment('');
+                              }}
+                              variant="outline"
+                              size="sm"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <Button
+                          onClick={() => setFeedbackOrderId(order.id)}
+                          variant="outline"
+                          size="sm"
+                        >
+                          <Star className="h-4 w-4 mr-2" />
+                          Leave Feedback
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
