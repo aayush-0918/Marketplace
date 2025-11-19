@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Search, Filter, Star, MapPin, ShoppingCart } from 'lucide-react';
+import { Search, Filter, Star, MapPin, ShoppingCart, Package } from 'lucide-react';
 import { mockProducts, categories } from '@/lib/mockData';
 import { Product } from '@/types';
 import { storage } from '@/lib/storage';
@@ -20,7 +20,18 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState([0, 2000]);
   const [stockFilter, setStockFilter] = useState('all');
+  const [quantityFilter, setQuantityFilter] = useState([1, 100]);
+  const [distanceFilter, setDistanceFilter] = useState([0, 50]);
+  const [userLocation, setUserLocation] = useState<string>('');
   const user = storage.getUser();
+
+  useEffect(() => {
+    const location = localStorage.getItem('userLocation');
+    if (location) {
+      const { lat, lng } = JSON.parse(location);
+      setUserLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
+    }
+  }, []);
 
   useEffect(() => {
     let filtered = mockProducts;
@@ -45,7 +56,7 @@ export default function Home() {
     }
 
     setProducts(filtered);
-  }, [searchQuery, selectedCategory, priceRange, stockFilter]);
+  }, [searchQuery, selectedCategory, priceRange, stockFilter, quantityFilter, distanceFilter]);
 
   const addToCart = (product: Product) => {
     if (!user) {
@@ -79,9 +90,15 @@ export default function Home() {
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               Discover Amazing Products
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-muted-foreground mb-4">
               Shop from thousands of products with the best prices and quality
             </p>
+            {userLocation && (
+              <div className="flex items-center gap-2 text-muted-foreground mb-8">
+                <MapPin className="h-5 w-5" />
+                <span>Showing shops near you: {userLocation}</span>
+              </div>
+            )}
             {!user && (
               <Button size="lg" onClick={() => navigate('/auth')}>
                 Get Started
@@ -129,10 +146,17 @@ export default function Home() {
           </div>
 
           <div className="mt-4">
-            <div className="flex items-center gap-4">
-              <Filter className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Price Range:</span>
-              <div className="flex-1 max-w-md">
+            <div className="flex flex-col gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Filter className="h-4 w-4" />
+                    Price Range
+                  </label>
+                  <span className="text-sm text-muted-foreground">
+                    ${priceRange[0]} - ${priceRange[1]}
+                  </span>
+                </div>
                 <Slider
                   value={priceRange}
                   onValueChange={setPriceRange}
@@ -141,9 +165,44 @@ export default function Home() {
                   className="w-full"
                 />
               </div>
-              <span className="text-sm text-muted-foreground min-w-32">
-                ${priceRange[0]} - ${priceRange[1]}
-              </span>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <Package className="h-4 w-4" />
+                    Quantity Range
+                  </label>
+                  <span className="text-sm text-muted-foreground">
+                    {quantityFilter[0]} - {quantityFilter[1]}
+                  </span>
+                </div>
+                <Slider
+                  value={quantityFilter}
+                  onValueChange={setQuantityFilter}
+                  max={100}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Distance
+                  </label>
+                  <span className="text-sm text-muted-foreground">
+                    {distanceFilter[0]}km - {distanceFilter[1]}km
+                  </span>
+                </div>
+                <Slider
+                  value={distanceFilter}
+                  onValueChange={setDistanceFilter}
+                  max={50}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Package, ShoppingCart, Users, TrendingUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Package, ShoppingCart, Users, TrendingUp, Calendar as CalendarIcon, Truck } from 'lucide-react';
 import { storage } from '@/lib/storage';
+import { format } from 'date-fns';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const user = storage.getUser();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   useEffect(() => {
     if (!user) {
@@ -21,6 +25,9 @@ export default function Dashboard() {
   const orders = storage.getOrders().filter(o => o.userId === user.id);
   const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
   const cartItems = storage.getCart().length;
+  const upcomingDeliveries = orders.filter(o => 
+    ['confirmed', 'shipped'].includes(o.status) && o.deliveryDate
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,6 +91,93 @@ export default function Dashboard() {
               <p className="text-xs text-muted-foreground mt-1">
                 Member status
               </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CalendarIcon className="h-5 w-5" />
+                Delivery Calendar
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border"
+              />
+              <div className="mt-4 space-y-2">
+                <p className="text-sm font-medium">Upcoming Deliveries:</p>
+                {upcomingDeliveries.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No upcoming deliveries</p>
+                ) : (
+                  upcomingDeliveries.map(order => (
+                    <div key={order.id} className="text-sm p-2 bg-muted rounded-md">
+                      <div className="flex justify-between">
+                        <span>Order #{order.id}</span>
+                        <Badge variant="outline" className="text-xs">
+                          {order.status}
+                        </Badge>
+                      </div>
+                      {order.deliveryDate && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Expected: {format(new Date(order.deliveryDate), 'PPP')}
+                        </p>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Truck className="h-5 w-5" />
+                Delivery Tracking
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {upcomingDeliveries.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">No active deliveries to track</p>
+                ) : (
+                  upcomingDeliveries.map(order => (
+                    <div key={order.id} className="border rounded-lg p-4">
+                      <div className="flex justify-between items-start mb-3">
+                        <div>
+                          <p className="font-medium">Order #{order.id}</p>
+                          {order.trackingNumber && (
+                            <p className="text-sm text-muted-foreground">
+                              Tracking: {order.trackingNumber}
+                            </p>
+                          )}
+                        </div>
+                        <Badge>{order.status}</Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${order.status === 'confirmed' ? 'bg-primary' : 'bg-muted'}`}></div>
+                          <span className="text-sm">Order Confirmed</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${order.status === 'shipped' ? 'bg-primary' : 'bg-muted'}`}></div>
+                          <span className="text-sm">Shipped</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${order.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`}></div>
+                          <span className="text-sm">Delivered</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </CardContent>
           </Card>
         </div>
