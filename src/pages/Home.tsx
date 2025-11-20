@@ -15,7 +15,8 @@ import { toast } from 'sonner';
 
 export default function Home() {
   const navigate = useNavigate();
-  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [allRetailerProducts, setAllRetailerProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [priceRange, setPriceRange] = useState([0, 2000]);
@@ -31,6 +32,11 @@ export default function Home() {
       const { lat, lng } = JSON.parse(location);
       setUserLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
     }
+
+    // Load all retailer products for customers to see
+    const retailerProducts = localStorage.getItem('retailer_products');
+    const loadedProducts = retailerProducts ? JSON.parse(retailerProducts) : [];
+    setAllRetailerProducts([...mockProducts, ...loadedProducts]);
   }, []);
 
   // Calculate distance between two coordinates using Haversine formula
@@ -47,7 +53,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    let filtered = mockProducts;
+    let filtered = allRetailerProducts;
 
     if (searchQuery) {
       filtered = filtered.filter(p =>
@@ -83,7 +89,7 @@ export default function Home() {
     }
 
     setProducts(filtered);
-  }, [searchQuery, selectedCategory, priceRange, stockFilter, quantityFilter, distanceFilter]);
+  }, [searchQuery, selectedCategory, priceRange, stockFilter, quantityFilter, distanceFilter, allRetailerProducts]);
 
   const addToCart = (product: Product) => {
     if (!user) {
