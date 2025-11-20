@@ -158,14 +158,14 @@ export default function Payment() {
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground">
-                  By confirming your payment, you allow ShopHub to charge your card for this payment and future payments in accordance with their terms.
+                  By confirming your payment, you allow BITSKart to charge your card for this payment and future payments in accordance with their terms.
                 </p>
               </form>
             </CardContent>
           </Card>
 
           <div className="flex items-center justify-center gap-4 mt-8 text-xs text-muted-foreground">
-            <span>Powered by ShopHub</span>
+            <span>Powered by BITSKart</span>
             <span>•</span>
             <a href="#" className="hover:text-foreground">Terms</a>
             <span>•</span>
