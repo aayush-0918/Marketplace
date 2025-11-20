@@ -33,6 +33,19 @@ export default function Home() {
     }
   }, []);
 
+  // Calculate distance between two coordinates using Haversine formula
+  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
   useEffect(() => {
     let filtered = mockProducts;
 
@@ -49,10 +62,24 @@ export default function Home() {
 
     filtered = filtered.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
 
+    // Quantity filter
+    filtered = filtered.filter(p => p.stock >= quantityFilter[0] && p.stock <= quantityFilter[1]);
+
     if (stockFilter === 'instock') {
       filtered = filtered.filter(p => p.stock > 0);
     } else if (stockFilter === 'outofstock') {
       filtered = filtered.filter(p => p.stock === 0);
+    }
+
+    // Distance filter - only apply if user location is available
+    const storedLocation = localStorage.getItem('userLocation');
+    if (storedLocation) {
+      const { lat: userLat, lng: userLng } = JSON.parse(storedLocation);
+      filtered = filtered.filter(p => {
+        if (!p.location) return true;
+        const distance = calculateDistance(userLat, userLng, p.location.lat, p.location.lng);
+        return distance <= distanceFilter[1];
+      });
     }
 
     setProducts(filtered);
@@ -253,6 +280,25 @@ export default function Home() {
                       ({product.reviewCount})
                     </span>
                   </div>
+                  {product.location && (() => {
+                    const storedLocation = localStorage.getItem('userLocation');
+                    if (storedLocation) {
+                      const { lat: userLat, lng: userLng } = JSON.parse(storedLocation);
+                      const distance = calculateDistance(userLat, userLng, product.location.lat, product.location.lng);
+                      return (
+                        <div className="flex items-center gap-1 mb-3 text-xs text-muted-foreground">
+                          <MapPin className="h-3 w-3" />
+                          <span>{distance.toFixed(1)} km away · {product.location.name}</span>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div className="flex items-center gap-1 mb-3 text-xs text-muted-foreground">
+                        <MapPin className="h-3 w-3" />
+                        <span>{product.location.name}</span>
+                      </div>
+                    );
+                  })()}
                   <div className="flex items-center justify-between">
                     <span className="text-2xl font-bold text-primary">
                       ${product.price}
@@ -263,6 +309,11 @@ export default function Home() {
                       </span>
                     )}
                   </div>
+                  {product.stock === 0 && product.availabilityDate && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Available: {new Date(product.availabilityDate).toLocaleDateString()}
+                    </p>
+                  )}
                 </CardContent>
                 <CardFooter className="p-4 pt-0">
                   <Button

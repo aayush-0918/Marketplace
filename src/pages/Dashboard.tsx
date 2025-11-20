@@ -160,18 +160,118 @@ export default function Dashboard() {
                         </div>
                         <Badge>{order.status}</Badge>
                       </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <div className={`w-3 h-3 rounded-full ${order.status === 'confirmed' ? 'bg-primary' : 'bg-muted'}`}></div>
-                          <span className="text-sm">Order Confirmed</span>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                            ['confirmed', 'shipped', 'delivered'].includes(order.status) 
+                              ? 'bg-primary ring-4 ring-primary/20' 
+                              : 'bg-muted'
+                          }`}>
+                            {['confirmed', 'shipped', 'delivered'].includes(order.status) && (
+                              <div className="w-2 h-2 bg-background rounded-full"></div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <span className={`text-sm font-medium ${
+                              ['confirmed', 'shipped', 'delivered'].includes(order.status) 
+                                ? 'text-foreground' 
+                                : 'text-muted-foreground'
+                            }`}>
+                              Order Confirmed
+                            </span>
+                            {order.status === 'confirmed' && (
+                              <p className="text-xs text-muted-foreground">Package is being prepared</p>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-3 h-3 rounded-full ${order.status === 'shipped' ? 'bg-primary' : 'bg-muted'}`}></div>
-                          <span className="text-sm">Shipped</span>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="relative">
+                            <div className={`absolute left-1/2 -translate-x-1/2 w-0.5 h-6 -top-6 ${
+                              ['shipped', 'delivered'].includes(order.status) ? 'bg-primary' : 'bg-muted'
+                            }`}></div>
+                            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                              ['shipped', 'delivered'].includes(order.status) 
+                                ? 'bg-primary ring-4 ring-primary/20' 
+                                : 'bg-muted'
+                            }`}>
+                              {['shipped', 'delivered'].includes(order.status) && (
+                                <div className="w-2 h-2 bg-background rounded-full"></div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <span className={`text-sm font-medium ${
+                              ['shipped', 'delivered'].includes(order.status) 
+                                ? 'text-foreground' 
+                                : 'text-muted-foreground'
+                            }`}>
+                              Dispatched & Shipped
+                            </span>
+                            {order.status === 'shipped' && (
+                              <p className="text-xs text-muted-foreground">Package is on the way</p>
+                            )}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className={`w-3 h-3 rounded-full ${order.status === 'delivered' ? 'bg-primary' : 'bg-muted'}`}></div>
-                          <span className="text-sm">Delivered</span>
+                        
+                        <div className="flex items-center gap-3">
+                          <div className="relative">
+                            <div className={`absolute left-1/2 -translate-x-1/2 w-0.5 h-6 -top-6 ${
+                              order.status === 'delivered' ? 'bg-primary' : 'bg-muted'
+                            }`}></div>
+                            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                              order.status === 'delivered' 
+                                ? 'bg-primary ring-4 ring-primary/20' 
+                                : 'bg-muted'
+                            }`}>
+                              {order.status === 'delivered' && (
+                                <div className="w-2 h-2 bg-background rounded-full"></div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <span className={`text-sm font-medium ${
+                              order.status === 'delivered' 
+                                ? 'text-foreground' 
+                                : 'text-muted-foreground'
+                            }`}>
+                              Out for Delivery
+                            </span>
+                            {order.status === 'delivered' && (
+                              <p className="text-xs text-muted-foreground">Arriving today</p>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="relative">
+                            <div className={`absolute left-1/2 -translate-x-1/2 w-0.5 h-6 -top-6 ${
+                              order.status === 'delivered' ? 'bg-primary' : 'bg-muted'
+                            }`}></div>
+                            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                              order.status === 'delivered' 
+                                ? 'bg-green-500 ring-4 ring-green-500/20' 
+                                : 'bg-muted'
+                            }`}>
+                              {order.status === 'delivered' && (
+                                <div className="w-2 h-2 bg-background rounded-full"></div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <span className={`text-sm font-medium ${
+                              order.status === 'delivered' 
+                                ? 'text-green-600 dark:text-green-400' 
+                                : 'text-muted-foreground'
+                            }`}>
+                              Delivered
+                            </span>
+                            {order.status === 'delivered' && order.deliveryDate && (
+                              <p className="text-xs text-muted-foreground">
+                                {format(new Date(order.deliveryDate), 'PPP')}
+                              </p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
