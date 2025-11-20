@@ -12,7 +12,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-20',
     ratings: 4.5,
     reviewCount: 128,
-    location: { lat: 40.7128, lng: -74.0060, name: 'New York, NY' },
+    location: { lat: 17.3850, lng: 78.4867, name: 'Hyderabad City Center' },
   },
   {
     id: '2',
@@ -24,7 +24,7 @@ export const mockProducts: Product[] = [
     stock: 30,
     ratings: 4.7,
     reviewCount: 89,
-    location: { lat: 34.0522, lng: -118.2437, name: 'Los Angeles, CA' },
+    location: { lat: 17.4485, lng: 78.3908, name: 'Gachibowli, Hyderabad' },
   },
   {
     id: '3',
@@ -36,7 +36,7 @@ export const mockProducts: Product[] = [
     stock: 15,
     ratings: 4.8,
     reviewCount: 56,
-    location: { lat: 41.8781, lng: -87.6298, name: 'Chicago, IL' },
+    location: { lat: 17.4399, lng: 78.4983, name: 'Secunderabad' },
   },
   {
     id: '4',
@@ -49,7 +49,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-15',
     ratings: 4.9,
     reviewCount: 234,
-    location: { lat: 37.7749, lng: -122.4194, name: 'San Francisco, CA' },
+    location: { lat: 17.2403, lng: 78.4294, name: 'Shamshabad, Hyderabad' },
   },
   {
     id: '5',
@@ -61,7 +61,7 @@ export const mockProducts: Product[] = [
     stock: 60,
     ratings: 4.6,
     reviewCount: 178,
-    location: { lat: 29.7604, lng: -95.3698, name: 'Houston, TX' },
+    location: { lat: 17.4944, lng: 78.3908, name: 'HITEC City, Hyderabad' },
   },
   {
     id: '6',
@@ -73,7 +73,7 @@ export const mockProducts: Product[] = [
     stock: 120,
     ratings: 4.4,
     reviewCount: 312,
-    location: { lat: 47.6062, lng: -122.3321, name: 'Seattle, WA' },
+    location: { lat: 17.4126, lng: 78.4730, name: 'Banjara Hills, Hyderabad' },
   },
   {
     id: '7',
@@ -86,7 +86,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-25',
     ratings: 4.5,
     reviewCount: 95,
-    location: { lat: 33.4484, lng: -112.0740, name: 'Phoenix, AZ' },
+    location: { lat: 17.3616, lng: 78.4747, name: 'Charminar Area, Hyderabad' },
   },
   {
     id: '8',
@@ -98,7 +98,7 @@ export const mockProducts: Product[] = [
     stock: 75,
     ratings: 4.7,
     reviewCount: 145,
-    location: { lat: 39.7392, lng: -104.9903, name: 'Denver, CO' },
+    location: { lat: 17.5520, lng: 78.5718, name: 'Kompally, Hyderabad' },
   },
   {
     id: '9',
@@ -110,19 +110,19 @@ export const mockProducts: Product[] = [
     stock: 45,
     ratings: 4.6,
     reviewCount: 267,
-    location: { lat: 42.3601, lng: -71.0589, name: 'Boston, MA' },
+    location: { lat: 17.4947, lng: 78.3998, name: 'Madhapur, Hyderabad' },
   },
   {
     id: '10',
     name: 'Stainless Steel Water Bottle',
-    description: 'Insulated water bottle keeps drinks cold for 24 hours.',
-    price: 34.99,
+    description: 'Insulated stainless steel water bottle keeps drinks cold for 24 hours.',
+    price: 29.99,
     image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500&q=80',
     category: 'Sports',
     stock: 200,
     ratings: 4.8,
     reviewCount: 489,
-    location: { lat: 25.7617, lng: -80.1918, name: 'Miami, FL' },
+    location: { lat: 17.3753, lng: 78.5270, name: 'LB Nagar, Hyderabad' },
   },
   {
     id: '11',
@@ -134,7 +134,7 @@ export const mockProducts: Product[] = [
     stock: 80,
     ratings: 4.5,
     reviewCount: 156,
-    location: { lat: 32.7767, lng: -96.7970, name: 'Dallas, TX' },
+    location: { lat: 17.4320, lng: 78.3990, name: 'Jubilee Hills, Hyderabad' },
   },
   {
     id: '12',
@@ -146,7 +146,7 @@ export const mockProducts: Product[] = [
     stock: 150,
     ratings: 4.3,
     reviewCount: 892,
-    location: { lat: 36.1627, lng: -86.7816, name: 'Nashville, TN' },
+    location: { lat: 17.4860, lng: 78.3167, name: 'Miyapur, Hyderabad' },
   },
   {
     id: '13',
@@ -158,7 +158,7 @@ export const mockProducts: Product[] = [
     stock: 95,
     ratings: 4.7,
     reviewCount: 421,
-    location: { lat: 45.5152, lng: -122.6784, name: 'Portland, OR' },
+    location: { lat: 17.5645, lng: 78.5389, name: 'Medchal, Hyderabad' },
   },
   {
     id: '14',
@@ -170,7 +170,7 @@ export const mockProducts: Product[] = [
     stock: 180,
     ratings: 4.6,
     reviewCount: 334,
-    location: { lat: 30.2672, lng: -97.7431, name: 'Austin, TX' },
+    location: { lat: 17.3704, lng: 78.5565, name: 'Uppal, Hyderabad' },
   },
   {
     id: '15',
@@ -182,7 +182,7 @@ export const mockProducts: Product[] = [
     stock: 40,
     ratings: 4.8,
     reviewCount: 278,
-    location: { lat: 39.9526, lng: -75.1652, name: 'Philadelphia, PA' },
+    location: { lat: 17.4306, lng: 78.5476, name: 'Dilsukhnagar, Hyderabad' },
   },
   {
     id: '16',
@@ -194,7 +194,7 @@ export const mockProducts: Product[] = [
     stock: 120,
     ratings: 4.5,
     reviewCount: 189,
-    location: { lat: 38.9072, lng: -77.0369, name: 'Washington, DC' },
+    location: { lat: 17.4030, lng: 78.5522, name: 'Habsiguda, Hyderabad' },
   },
   {
     id: '17',
@@ -206,7 +206,7 @@ export const mockProducts: Product[] = [
     stock: 85,
     ratings: 4.4,
     reviewCount: 567,
-    location: { lat: 35.2271, lng: -80.8431, name: 'Charlotte, NC' },
+    location: { lat: 17.4900, lng: 78.5500, name: 'Alwal, Hyderabad' },
   },
   {
     id: '18',
@@ -218,7 +218,7 @@ export const mockProducts: Product[] = [
     stock: 65,
     ratings: 4.7,
     reviewCount: 245,
-    location: { lat: 43.0389, lng: -87.9065, name: 'Milwaukee, WI' },
+    location: { lat: 17.3050, lng: 78.4600, name: 'Rajendranagar, Hyderabad' },
   },
   {
     id: '19',
@@ -230,7 +230,7 @@ export const mockProducts: Product[] = [
     stock: 110,
     ratings: 4.6,
     reviewCount: 412,
-    location: { lat: 37.3382, lng: -121.8863, name: 'San Jose, CA' },
+    location: { lat: 17.4240, lng: 78.4489, name: 'Ameerpet, Hyderabad' },
   },
   {
     id: '20',
@@ -242,7 +242,7 @@ export const mockProducts: Product[] = [
     stock: 55,
     ratings: 4.8,
     reviewCount: 198,
-    location: { lat: 40.4406, lng: -79.9959, name: 'Pittsburgh, PA' },
+    location: { lat: 17.4700, lng: 78.5800, name: 'Sainikpuri, Hyderabad' },
   },
   {
     id: '21',
@@ -254,7 +254,7 @@ export const mockProducts: Product[] = [
     stock: 140,
     ratings: 4.5,
     reviewCount: 324,
-    location: { lat: 44.9778, lng: -93.2650, name: 'Minneapolis, MN' },
+    location: { lat: 17.4580, lng: 78.4338, name: 'Kukatpally, Hyderabad' },
   },
   {
     id: '22',
@@ -266,7 +266,7 @@ export const mockProducts: Product[] = [
     stock: 250,
     ratings: 4.7,
     reviewCount: 678,
-    location: { lat: 33.7490, lng: -84.3880, name: 'Atlanta, GA' },
+    location: { lat: 17.3310, lng: 78.5510, name: 'Vanasthalipuram, Hyderabad' },
   },
   {
     id: '23',
@@ -278,7 +278,7 @@ export const mockProducts: Product[] = [
     stock: 90,
     ratings: 4.4,
     reviewCount: 456,
-    location: { lat: 41.2524, lng: -95.9980, name: 'Omaha, NE' },
+    location: { lat: 17.3500, lng: 78.4500, name: 'Mehdipatnam, Hyderabad' },
   },
   {
     id: '24',
@@ -290,7 +290,7 @@ export const mockProducts: Product[] = [
     stock: 70,
     ratings: 4.9,
     reviewCount: 891,
-    location: { lat: 28.5383, lng: -81.3792, name: 'Orlando, FL' },
+    location: { lat: 17.5200, lng: 78.4450, name: 'Nizampet, Hyderabad' },
   },
   {
     id: '25',
@@ -302,7 +302,7 @@ export const mockProducts: Product[] = [
     stock: 100,
     ratings: 4.8,
     reviewCount: 723,
-    location: { lat: 38.5816, lng: -121.4944, name: 'Sacramento, CA' },
+    location: { lat: 17.2800, lng: 78.4860, name: 'Kothur, Hyderabad' },
   },
   {
     id: '26',
@@ -314,7 +314,7 @@ export const mockProducts: Product[] = [
     stock: 80,
     ratings: 4.7,
     reviewCount: 234,
-    location: { lat: 35.4676, lng: -97.5164, name: 'Oklahoma City, OK' },
+    location: { lat: 17.4580, lng: 78.5300, name: 'Tarnaka, Hyderabad' },
   },
   {
     id: '27',
@@ -326,7 +326,7 @@ export const mockProducts: Product[] = [
     stock: 60,
     ratings: 4.9,
     reviewCount: 456,
-    location: { lat: 36.7783, lng: -119.4179, name: 'Fresno, CA' },
+    location: { lat: 17.4125, lng: 78.5050, name: 'Malakpet, Hyderabad' },
   },
   {
     id: '28',
@@ -338,7 +338,7 @@ export const mockProducts: Product[] = [
     stock: 150,
     ratings: 4.6,
     reviewCount: 678,
-    location: { lat: 32.7157, lng: -117.1611, name: 'San Diego, CA' },
+    location: { lat: 17.4030, lng: 78.4420, name: 'Tolichowki, Hyderabad' },
   },
   {
     id: '29',
@@ -350,7 +350,7 @@ export const mockProducts: Product[] = [
     stock: 95,
     ratings: 4.8,
     reviewCount: 1234,
-    location: { lat: 39.1031, lng: -84.5120, name: 'Cincinnati, OH' },
+    location: { lat: 17.6020, lng: 78.5800, name: 'Shamirpet, Hyderabad' },
   },
   {
     id: '30',
@@ -362,7 +362,7 @@ export const mockProducts: Product[] = [
     stock: 180,
     ratings: 4.5,
     reviewCount: 567,
-    location: { lat: 40.7608, lng: -111.8910, name: 'Salt Lake City, UT' },
+    location: { lat: 17.4420, lng: 78.3530, name: 'Kondapur, Hyderabad' },
   },
 ];
 
