@@ -69,10 +69,10 @@ export const storage = {
   },
 
   // Retailer Products
-  getRetailerProducts: (retailerId: string) => {
+  getRetailerProducts: (retailerId?: string) => {
     const products = localStorage.getItem(STORAGE_KEYS.RETAILER_PRODUCTS);
     const allProducts = products ? JSON.parse(products) : [];
-    return allProducts.filter((p: any) => p.retailerId === retailerId);
+    return retailerId ? allProducts.filter((p: any) => p.retailerId === retailerId) : allProducts;
   },
   addRetailerProduct: (product: any) => {
     const products = localStorage.getItem(STORAGE_KEYS.RETAILER_PRODUCTS);
@@ -97,10 +97,10 @@ export const storage = {
   },
 
   // Wholesaler Products
-  getWholesalerProducts: (wholesalerId: string) => {
+  getWholesalerProducts: (wholesalerId?: string) => {
     const products = localStorage.getItem(STORAGE_KEYS.WHOLESALER_PRODUCTS);
     const allProducts = products ? JSON.parse(products) : [];
-    return allProducts.filter((p: any) => p.wholesalerId === wholesalerId);
+    return wholesalerId ? allProducts.filter((p: any) => p.wholesalerId === wholesalerId) : allProducts;
   },
   addWholesalerProduct: (product: any) => {
     const products = localStorage.getItem(STORAGE_KEYS.WHOLESALER_PRODUCTS);

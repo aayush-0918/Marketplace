@@ -27,6 +27,13 @@ export default function Home() {
   const [userLocation, setUserLocation] = useState<string>('');
   const user = storage.getUser();
 
+  // Redirect retailers/wholesalers to their dashboards
+  useEffect(() => {
+    if (user && (user.role === 'retailer' || user.role === 'wholesaler')) {
+      navigate(user.role === 'retailer' ? '/retailer-dashboard' : '/wholesaler-dashboard');
+    }
+  }, [user, navigate]);
+
   useEffect(() => {
     const location = localStorage.getItem('userLocation');
     if (location) {
@@ -34,14 +41,16 @@ export default function Home() {
       setUserLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
     }
 
-    // Load retailer products separately
-    const retailerProducts = localStorage.getItem('retailer_products');
-    const loadedProducts = retailerProducts ? JSON.parse(retailerProducts) : [];
-    setRetailerOnlyProducts(loadedProducts);
+    // Load retailer and wholesaler products
+    const retailerProducts = storage.getRetailerProducts();
+    const wholesalerProducts = storage.getWholesalerProducts();
     
-    // For the main grid, combine mock products with retailer products
-    setAllRetailerProducts([...mockProducts, ...loadedProducts]);
-    setProducts([...mockProducts, ...loadedProducts]);
+    const allAddedProducts = [...retailerProducts, ...wholesalerProducts];
+    setRetailerOnlyProducts(allAddedProducts);
+    
+    // Combine mock products with retailer and wholesaler products
+    setAllRetailerProducts([...mockProducts, ...allAddedProducts]);
+    setProducts([...mockProducts, ...allAddedProducts]);
   }, []);
 
   // Calculate distance between two coordinates using Haversine formula
@@ -155,13 +164,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Retailer Products Section */}
+      {/* Retailer/Wholesaler Products Section */}
       {retailerOnlyProducts.length > 0 && (
         <section className="py-12 bg-muted/30">
           <div className="container mx-auto px-4">
             <div className="mb-8">
-              <h2 className="text-3xl font-bold mb-2">Products from Our Retailers</h2>
-              <p className="text-muted-foreground">Discover unique products from local retailers</p>
+              <h2 className="text-3xl font-bold mb-2">Products from Our Sellers</h2>
+              <p className="text-muted-foreground">Discover unique products from local retailers and wholesalers</p>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -173,7 +182,7 @@ export default function Home() {
                 >
                   <div className="aspect-square overflow-hidden bg-secondary relative">
                     <Badge className="absolute top-2 right-2 z-10" variant="secondary">
-                      Retailer
+                      {product.retailerId ? 'Retailer' : product.wholesalerId ? 'Wholesaler' : 'Seller'}
                     </Badge>
                     <img
                       src={product.image}
@@ -234,7 +243,7 @@ export default function Home() {
             {retailerOnlyProducts.length > 8 && (
               <div className="text-center mt-8">
                 <p className="text-sm text-muted-foreground">
-                  Showing 8 of {retailerOnlyProducts.length} retailer products. 
+                  Showing 8 of {retailerOnlyProducts.length} seller products. 
                   Scroll down to see all products with filters.
                 </p>
               </div>
