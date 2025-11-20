@@ -108,6 +108,22 @@ export default function WholesalerDashboard() {
 
   const handleOrderStatusUpdate = (orderId: string, status: string) => {
     storage.updateWholesalerOrder(orderId, { status });
+    
+    // If order is confirmed, reduce stock
+    if (status === 'confirmed') {
+      const order = retailerOrders.find((o: any) => o.id === orderId);
+      if (order && order.items) {
+        order.items.forEach((item: any) => {
+          const product = products.find((p: any) => p.id === item.product.id);
+          if (product) {
+            const newStock = Math.max(0, product.stock - item.quantity);
+            storage.updateWholesalerProduct(product.id, { stock: newStock });
+          }
+        });
+        setProducts(storage.getWholesalerProducts(user?.id || ''));
+      }
+    }
+    
     toast.success(`Order ${status}!`);
   };
 
