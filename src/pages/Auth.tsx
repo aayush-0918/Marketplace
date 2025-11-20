@@ -99,7 +99,7 @@ export default function Auth() {
     };
 
     storage.setUser(user);
-    toast.success('Welcome to ShopHub!');
+    toast.success('Welcome to BITSKart!');
     requestLocationAccess();
   };
 
@@ -170,7 +170,7 @@ export default function Auth() {
               <Store className="h-6 w-6 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Welcome to ShopHub</CardTitle>
+          <CardTitle className="text-2xl">Welcome to BITSKart</CardTitle>
           <CardDescription>
             {isSignUp ? 'Create your account' : 'Sign in to your account'}
           </CardDescription>
@@ -185,7 +185,7 @@ export default function Auth() {
             <div className="space-y-4">
               <div className="text-center mb-4">
                 <h3 className="font-semibold text-lg">Select Your Account Type</h3>
-                <p className="text-sm text-muted-foreground">Choose how you'll use ShopHub</p>
+                <p className="text-sm text-muted-foreground">Choose how you'll use BITSKart</p>
               </div>
               <RadioGroup value={role} onValueChange={(v) => setRole(v as UserRole)}>
                 <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-accent cursor-pointer">
