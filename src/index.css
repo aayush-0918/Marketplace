@@ -2,12 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* 
+  ================================
+  DESIGN SYSTEM — MODERNIZED SETUP
+  - All colors use HSL
+  - Includes gradients, shadows, transitions, radii
+  - Light & Dark Theme Variables
+  ================================
 */
 
 @layer base {
   :root {
+    /* Core Colors */
     --background: 0 0% 100%;
     --foreground: 215 20% 15%;
 
@@ -17,62 +23,85 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 215 20% 15%;
 
+    /* Primary System */
     --primary: 185 75% 45%;
     --primary-foreground: 0 0% 100%;
 
+    /* Secondary System */
     --secondary: 215 20% 95%;
     --secondary-foreground: 215 20% 15%;
 
+    /* Muted / Subtle */
     --muted: 215 20% 95%;
     --muted-foreground: 215 15% 45%;
 
+    /* Accent Actions */
     --accent: 25 95% 55%;
     --accent-foreground: 0 0% 100%;
 
+    /* Alerts */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 215 20% 88%;
-    --input: 215 20% 88%;
-    --ring: 185 75% 45%;
-
     --success: 142 70% 45%;
     --success-foreground: 0 0% 100%;
-
     --warning: 45 95% 55%;
     --warning-foreground: 215 20% 15%;
 
+    /* UI Tokens */
+    --border: 215 20% 88%;
+    --input: 215 20% 88%;
+    --ring: 185 75% 45%;
     --radius: 0.75rem;
-    
-    --gradient-primary: linear-gradient(135deg, hsl(185 75% 45%) 0%, hsl(185 75% 35%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(25 95% 55%) 0%, hsl(25 95% 45%) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(185 75% 45% / 0.1) 0%, hsl(25 95% 55% / 0.1) 100%);
-    
-    --shadow-sm: 0 1px 2px 0 hsl(215 20% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(215 20% 15% / 0.1), 0 2px 4px -2px hsl(215 20% 15% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(215 20% 15% / 0.1), 0 4px 6px -4px hsl(215 20% 15% / 0.1);
-    --shadow-xl: 0 20px 25px -5px hsl(215 20% 15% / 0.1), 0 8px 10px -6px hsl(215 20% 15% / 0.1);
 
+    /* Modern Gradients */
+    --gradient-primary: linear-gradient(
+      135deg, 
+      hsl(185 75% 45%) 0%, 
+      hsl(185 75% 35%) 100%
+    );
+
+    --gradient-accent: linear-gradient(
+      135deg, 
+      hsl(25 95% 55%) 0%, 
+      hsl(25 95% 45%) 100%
+    );
+
+    --gradient-hero: linear-gradient(
+      135deg, 
+      hsl(185 75% 45% / 0.1) 0%, 
+      hsl(25 95% 55% / 0.1) 100%
+    );
+
+    /* Modern Shadows */
+    --shadow-sm: 0 1px 2px hsl(215 20% 15% / 0.05);
+    --shadow-md: 
+      0 4px 6px -1px hsl(215 20% 15% / 0.1),
+      0 2px 4px -2px hsl(215 20% 15% / 0.1);
+    --shadow-lg: 
+      0 10px 15px -3px hsl(215 20% 15% / 0.1),
+      0 4px 6px -4px hsl(215 20% 15% / 0.1);
+    --shadow-xl:
+      0 20px 25px -5px hsl(215 20% 15% / 0.1),
+      0 8px 10px -6px hsl(215 20% 15% / 0.1);
+
+    /* Smooth Modern Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
+    /* Sidebar System */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  /* ===========================
+       DARK MODE
+     =========================== */
   .dark {
     --background: 215 28% 10%;
     --foreground: 0 0% 98%;
@@ -101,6 +130,8 @@ All colors MUST be HSL.
     --border: 215 25% 20%;
     --input: 215 25% 20%;
     --ring: 185 75% 50%;
+
+    /* Dark Sidebar */
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -112,12 +143,15 @@ All colors MUST be HSL.
   }
 }
 
+/* ================================
+   Global Base Styles
+   ================================ */
 @layer base {
   * {
     @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
   }
 }
