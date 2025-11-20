@@ -82,27 +82,23 @@ export default function Home() {
       filtered = filtered.filter(p => p.stock === 0);
     }
 
-    // Distance filter - apply based on user location and distance setting
+    // Distance filter - always apply, max 100km from user location
     const storedLocation = localStorage.getItem('userLocation');
-    if (storedLocation && distanceFilter[1] < 100) {
+    if (storedLocation) {
       const { lat: userLat, lng: userLng } = JSON.parse(storedLocation);
       
-      // Calculate distances and sort by distance
+      // Calculate distances for all products
       const productsWithDistance = filtered.map(p => ({
         product: p,
         distance: p.location 
           ? calculateDistance(userLat, userLng, p.location.lat, p.location.lng)
           : 0
-      })).sort((a, b) => b.distance - a.distance); // Sort by distance descending (farthest first)
+      }));
       
-      // Calculate how many products to show based on distance filter
-      const maxDistance = distanceFilter[1];
-      const productsToShow = Math.max(1, productsWithDistance.length - (Math.floor((100 - maxDistance) / 10) * 3));
-      
-      // Filter by distance and limit products
+      // Filter products within selected distance (max 100km)
+      const maxDistance = Math.min(distanceFilter[1], 100);
       filtered = productsWithDistance
         .filter(({ distance }) => distance <= maxDistance)
-        .slice(0, productsToShow)
         .map(({ product }) => product);
     }
 
