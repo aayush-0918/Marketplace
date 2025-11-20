@@ -78,7 +78,7 @@ export default function Home() {
       filtered = filtered.filter(p => {
         if (!p.location) return true;
         const distance = calculateDistance(userLat, userLng, p.location.lat, p.location.lng);
-        return distance <= distanceFilter[1];
+        return distance >= distanceFilter[0] && distance <= distanceFilter[1];
       });
     }
 
