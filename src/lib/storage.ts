@@ -41,6 +41,10 @@ export const storage = {
   },
   addOrder: (order: Order) => {
     const orders = storage.getOrders();
+    // Calculate delivery date (4 days from now)
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + 4);
+    order.deliveryDate = deliveryDate.toISOString().split('T')[0];
     orders.unshift(order);
     localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(orders));
   },

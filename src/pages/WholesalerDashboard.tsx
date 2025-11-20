@@ -9,13 +9,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from '@/components/ui/badge';
 import { storage } from '@/lib/storage';
 import { toast } from 'sonner';
-import { Package, Plus, Edit, Trash2, Users, DollarSign, ShoppingCart } from 'lucide-react';
+import { Package, Plus, Edit, Trash2, Users, DollarSign, ShoppingCart, Wand2, Upload } from 'lucide-react';
 
 export default function WholesalerDashboard() {
   const user = storage.getUser();
   const [products, setProducts] = useState(storage.getWholesalerProducts(user?.id || ''));
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -108,6 +109,53 @@ export default function WholesalerDashboard() {
   const handleOrderStatusUpdate = (orderId: string, status: string) => {
     storage.updateWholesalerOrder(orderId, { status });
     toast.success(`Order ${status}!`);
+  };
+
+  const handleGenerateImage = async () => {
+    if (!formData.name || !formData.description) {
+      toast.error('Please enter product name and description first');
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-product-image`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          productName: formData.name,
+          description: formData.description,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to generate image');
+      }
+
+      setFormData({ ...formData, image: data.imageUrl });
+      toast.success('Image generated successfully!');
+    } catch (error) {
+      console.error('Error generating image:', error);
+      toast.error('Failed to generate image');
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, image: reader.result as string });
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -238,11 +286,52 @@ export default function WholesalerDashboard() {
                       onChange={(e) => setFormData({ ...formData, minOrderQty: e.target.value })}
                       required
                     />
+                    </div>
                   </div>
-                </div>
-                <Button type="submit" className="w-full">
-                  {editingProduct ? 'Update Product' : 'Add Product'}
-                </Button>
+                  
+                  <div className="space-y-2">
+                    <Label>Product Image</Label>
+                    <div className="flex gap-2">
+                      <div className="relative flex-1">
+                        <Input
+                          id="image-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full"
+                          onClick={() => document.getElementById('image-upload')?.click()}
+                        >
+                          <Upload className="mr-2 h-4 w-4" />
+                          Upload Image
+                        </Button>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={handleGenerateImage}
+                        disabled={isGeneratingImage || !formData.name || !formData.description}
+                      >
+                        <Wand2 className="mr-2 h-4 w-4" />
+                        {isGeneratingImage ? 'Generating...' : 'AI Generate'}
+                      </Button>
+                    </div>
+                    {formData.image && formData.image !== '/placeholder.svg' && (
+                      <img
+                        src={formData.image}
+                        alt="Product preview"
+                        className="w-full h-48 object-cover rounded-md mt-2"
+                      />
+                    )}
+                  </div>
+                  
+                  <Button type="submit" className="w-full">
+                    {editingProduct ? 'Update Product' : 'Add Product'}
+                  </Button>
               </form>
             </DialogContent>
           </Dialog>

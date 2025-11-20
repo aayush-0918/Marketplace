@@ -113,8 +113,24 @@ export default function Dashboard() {
                 selected={selectedDate}
                 onSelect={setSelectedDate}
                 className="rounded-md border"
+                modifiers={{
+                  delivery: upcomingDeliveries
+                    .filter(o => o.deliveryDate)
+                    .map(o => new Date(o.deliveryDate!))
+                }}
+                modifiersStyles={{
+                  delivery: {
+                    backgroundColor: 'hsl(var(--primary))',
+                    color: 'hsl(var(--primary-foreground))',
+                    fontWeight: 'bold',
+                  }
+                }}
               />
               <div className="mt-4 space-y-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-4 h-4 rounded bg-primary"></div>
+                  <span className="text-sm text-muted-foreground">Expected Delivery Date</span>
+                </div>
                 <p className="text-sm font-medium">Upcoming Deliveries:</p>
                 {upcomingDeliveries.length === 0 ? (
                   <p className="text-sm text-muted-foreground">No upcoming deliveries</p>
