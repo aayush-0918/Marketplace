@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,13 +28,13 @@ export default function RetailerDashboard() {
     image: '/placeholder.svg',
   });
 
-  // Load all wholesaler products
-  useState(() => {
+  // Load all wholesaler products on mount
+  useEffect(() => {
     const allWholesalerProducts = localStorage.getItem('wholesaler_products');
     if (allWholesalerProducts) {
       setWholesalerProducts(JSON.parse(allWholesalerProducts));
     }
-  });
+  }, []);
 
   const customerPurchases = storage.getCustomerPurchases().filter(
     (p: any) => p.retailerId === user?.id
