@@ -39,7 +39,7 @@ export default function Home() {
     const loadedProducts = retailerProducts ? JSON.parse(retailerProducts) : [];
     setRetailerOnlyProducts(loadedProducts);
     
-    // Combine mock products with retailer products for main grid
+    // For the main grid, combine mock products with retailer products
     setAllRetailerProducts([...mockProducts, ...loadedProducts]);
     setProducts([...mockProducts, ...loadedProducts]);
   }, []);
