@@ -12,6 +12,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-20',
     ratings: 4.5,
     reviewCount: 128,
+    location: { lat: 40.7128, lng: -74.0060, name: 'New York, NY' },
   },
   {
     id: '2',
@@ -23,6 +24,7 @@ export const mockProducts: Product[] = [
     stock: 30,
     ratings: 4.7,
     reviewCount: 89,
+    location: { lat: 34.0522, lng: -118.2437, name: 'Los Angeles, CA' },
   },
   {
     id: '3',
@@ -34,6 +36,7 @@ export const mockProducts: Product[] = [
     stock: 15,
     ratings: 4.8,
     reviewCount: 56,
+    location: { lat: 41.8781, lng: -87.6298, name: 'Chicago, IL' },
   },
   {
     id: '4',
@@ -46,6 +49,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-15',
     ratings: 4.9,
     reviewCount: 234,
+    location: { lat: 37.7749, lng: -122.4194, name: 'San Francisco, CA' },
   },
   {
     id: '5',
@@ -57,6 +61,7 @@ export const mockProducts: Product[] = [
     stock: 60,
     ratings: 4.6,
     reviewCount: 178,
+    location: { lat: 29.7604, lng: -95.3698, name: 'Houston, TX' },
   },
   {
     id: '6',
@@ -68,6 +73,7 @@ export const mockProducts: Product[] = [
     stock: 120,
     ratings: 4.4,
     reviewCount: 312,
+    location: { lat: 47.6062, lng: -122.3321, name: 'Seattle, WA' },
   },
   {
     id: '7',
@@ -80,6 +86,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-25',
     ratings: 4.5,
     reviewCount: 95,
+    location: { lat: 33.4484, lng: -112.0740, name: 'Phoenix, AZ' },
   },
   {
     id: '8',
@@ -91,6 +98,7 @@ export const mockProducts: Product[] = [
     stock: 75,
     ratings: 4.7,
     reviewCount: 145,
+    location: { lat: 39.7392, lng: -104.9903, name: 'Denver, CO' },
   },
 ];
 

@@ -22,6 +22,11 @@ export interface Product {
   isProxy?: boolean;
   ratings: number;
   reviewCount: number;
+  location?: {
+    lat: number;
+    lng: number;
+    name: string;
+  };
 }
 
 export interface CartItem {
