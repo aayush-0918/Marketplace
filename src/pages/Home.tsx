@@ -79,9 +79,9 @@ export default function Home() {
       filtered = filtered.filter(p => p.stock === 0);
     }
 
-    // Distance filter - only apply if user location is available
+    // Distance filter - apply based on user location and distance setting
     const storedLocation = localStorage.getItem('userLocation');
-    if (storedLocation) {
+    if (storedLocation && distanceFilter[1] < 100) {
       const { lat: userLat, lng: userLng } = JSON.parse(storedLocation);
       
       // Calculate distances and sort by distance
@@ -94,7 +94,6 @@ export default function Home() {
       
       // Calculate how many products to show based on distance filter
       const maxDistance = distanceFilter[1];
-      const distanceRanges = Math.floor(maxDistance / 10); // Number of 10km ranges
       const productsToShow = Math.max(1, productsWithDistance.length - (Math.floor((100 - maxDistance) / 10) * 3));
       
       // Filter by distance and limit products
