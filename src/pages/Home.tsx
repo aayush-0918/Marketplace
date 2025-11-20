@@ -36,7 +36,9 @@ export default function Home() {
     // Load all retailer products for customers to see
     const retailerProducts = localStorage.getItem('retailer_products');
     const loadedProducts = retailerProducts ? JSON.parse(retailerProducts) : [];
+    // Always include mock products
     setAllRetailerProducts([...mockProducts, ...loadedProducts]);
+    setProducts([...mockProducts, ...loadedProducts]);
   }, []);
 
   // Calculate distance between two coordinates using Haversine formula
