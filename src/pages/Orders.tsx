@@ -154,6 +154,48 @@ export default function Orders() {
                   ))}
 
                   <div className="border-t pt-4">
+                    {/* Delivery Tracking Line */}
+                    <div className="mb-6">
+                      <div className="flex items-center justify-between relative">
+                        {/* Progress line background */}
+                        <div className="absolute top-4 left-0 right-0 h-0.5 bg-border" style={{ zIndex: 0 }} />
+                        {/* Active progress line */}
+                        <div 
+                          className="absolute top-4 left-0 h-0.5 bg-primary transition-all duration-500" 
+                          style={{ 
+                            width: order.status === 'pending' ? '0%' : 
+                                   order.status === 'confirmed' ? '33%' : 
+                                   order.status === 'shipped' ? '66%' : 
+                                   order.status === 'delivered' ? '100%' : '0%',
+                            zIndex: 0
+                          }} 
+                        />
+                        
+                        {/* Status nodes */}
+                        {['pending', 'confirmed', 'shipped', 'delivered'].map((status, idx) => {
+                          const isActive = 
+                            (status === 'pending' && ['pending', 'confirmed', 'shipped', 'delivered'].includes(order.status)) ||
+                            (status === 'confirmed' && ['confirmed', 'shipped', 'delivered'].includes(order.status)) ||
+                            (status === 'shipped' && ['shipped', 'delivered'].includes(order.status)) ||
+                            (status === 'delivered' && order.status === 'delivered');
+                          
+                          return (
+                            <div key={status} className="flex flex-col items-center relative" style={{ zIndex: 1 }}>
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                                isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
+                              }`}>
+                                {status === 'pending' && <Clock className="h-4 w-4" />}
+                                {status === 'confirmed' && <CheckCircle className="h-4 w-4" />}
+                                {status === 'shipped' && <Truck className="h-4 w-4" />}
+                                {status === 'delivered' && <Package className="h-4 w-4" />}
+                              </div>
+                              <span className="text-xs mt-2 capitalize">{status}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
                     <div className="flex justify-between items-center">
                       <div>
                         <p className="text-sm text-muted-foreground">
