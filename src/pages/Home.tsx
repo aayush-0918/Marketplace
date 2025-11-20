@@ -21,7 +21,7 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState([0, 2000]);
   const [stockFilter, setStockFilter] = useState('all');
   const [quantityFilter, setQuantityFilter] = useState([1, 100]);
-  const [distanceFilter, setDistanceFilter] = useState([0, 50]);
+  const [distanceFilter, setDistanceFilter] = useState([0, 100]);
   const [userLocation, setUserLocation] = useState<string>('');
   const user = storage.getUser();
 
@@ -225,8 +225,8 @@ export default function Home() {
                 <Slider
                   value={distanceFilter}
                   onValueChange={setDistanceFilter}
-                  max={50}
-                  step={5}
+                  max={100}
+                  step={10}
                   className="w-full"
                 />
               </div>
