@@ -7,13 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { storage } from '@/lib/storage';
 import { toast } from 'sonner';
-import { Package, Plus, Edit, Trash2, ShoppingCart, Users, DollarSign, Wand2, Upload } from 'lucide-react';
+import { Package, Plus, Edit, Trash2, ShoppingCart, Users, DollarSign, Wand2, Upload, Store } from 'lucide-react';
 
 export default function RetailerDashboard() {
   const user = storage.getUser();
   const [products, setProducts] = useState(storage.getRetailerProducts(user?.id || ''));
+  const [wholesalerProducts, setWholesalerProducts] = useState<any[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
@@ -24,6 +26,14 @@ export default function RetailerDashboard() {
     stock: '',
     category: '',
     image: '/placeholder.svg',
+  });
+
+  // Load all wholesaler products
+  useState(() => {
+    const allWholesalerProducts = localStorage.getItem('wholesaler_products');
+    if (allWholesalerProducts) {
+      setWholesalerProducts(JSON.parse(allWholesalerProducts));
+    }
   });
 
   const customerPurchases = storage.getCustomerPurchases().filter(
@@ -95,17 +105,21 @@ export default function RetailerDashboard() {
     setIsAddDialogOpen(true);
   };
 
-  const handlePlaceWholesalerOrder = () => {
+  const handleOrderFromWholesaler = (product: any, quantity: number) => {
     const order = {
       id: Math.random().toString(36).substr(2, 9),
       retailerId: user?.id,
-      items: [],
-      total: 0,
+      wholesalerId: product.wholesalerId,
+      items: [{
+        product,
+        quantity
+      }],
+      total: product.price * quantity,
       status: 'pending',
       createdAt: new Date().toISOString(),
     };
     storage.addWholesalerOrder(order);
-    toast.success('Order placed with wholesaler!');
+    toast.success(`Ordered ${quantity} units of ${product.name} from wholesaler!`);
   };
 
   const handleGenerateImage = async () => {
@@ -207,19 +221,22 @@ export default function RetailerDashboard() {
           </Card>
         </div>
 
-        <div className="mb-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Inventory Management</h2>
-          <div className="flex gap-2">
-            <Button onClick={handlePlaceWholesalerOrder}>
-              Order from Wholesaler
-            </Button>
-            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-              <DialogTrigger asChild>
-                <Button onClick={() => setEditingProduct(null)}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Product
-                </Button>
-              </DialogTrigger>
+        <Tabs defaultValue="inventory" className="space-y-6">
+          <TabsList>
+            <TabsTrigger value="inventory">My Inventory</TabsTrigger>
+            <TabsTrigger value="wholesalers">Wholesaler Marketplace</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="inventory" className="space-y-6">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Inventory Management</h2>
+              <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button onClick={() => setEditingProduct(null)}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Product
+                  </Button>
+                </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
@@ -322,10 +339,9 @@ export default function RetailerDashboard() {
                 </form>
               </DialogContent>
             </Dialog>
-          </div>
-        </div>
+            </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product: any) => (
             <Card key={product.id}>
               <CardHeader>
@@ -366,13 +382,13 @@ export default function RetailerDashboard() {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </div>
+            ))}
+            </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Customer Purchases</CardTitle>
-          </CardHeader>
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Customer Purchases</CardTitle>
+              </CardHeader>
           <CardContent>
             {customerPurchases.length === 0 ? (
               <p className="text-muted-foreground">No purchases yet</p>
@@ -391,9 +407,80 @@ export default function RetailerDashboard() {
                   </div>
                 ))}
               </div>
+              )}
+            </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="wholesalers" className="space-y-6">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold">Wholesaler Marketplace</h2>
+                <p className="text-muted-foreground">Browse and order products from wholesalers</p>
+              </div>
+            </div>
+
+            {wholesalerProducts.length === 0 ? (
+              <Card>
+                <CardContent className="py-12 text-center">
+                  <Store className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                  <p className="text-muted-foreground">No wholesaler products available yet</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {wholesalerProducts.map((product: any) => (
+                  <Card key={product.id}>
+                    <CardHeader>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-48 object-cover rounded-md mb-4"
+                      />
+                      <CardTitle className="text-lg">{product.name}</CardTitle>
+                      <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="text-xl font-bold">${product.price}</span>
+                        <Badge variant={product.stock > 10 ? 'default' : 'destructive'}>
+                          Stock: {product.stock}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Order Quantity</Label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="number"
+                            min="1"
+                            max={product.stock}
+                            defaultValue="1"
+                            id={`quantity-${product.id}`}
+                          />
+                          <Button
+                            onClick={() => {
+                              const input = document.getElementById(`quantity-${product.id}`) as HTMLInputElement;
+                              const quantity = parseInt(input?.value || '1');
+                              if (quantity > 0 && quantity <= product.stock) {
+                                handleOrderFromWholesaler(product, quantity);
+                              } else {
+                                toast.error('Invalid quantity');
+                              }
+                            }}
+                            className="whitespace-nowrap"
+                          >
+                            <ShoppingCart className="h-4 w-4 mr-1" />
+                            Order
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             )}
-          </CardContent>
-        </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
