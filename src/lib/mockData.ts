@@ -1,6 +1,7 @@
 import { Product } from '@/types';
 
 export const mockProducts: Product[] = [
+  // 0-20 km range from Hyderabad
   {
     id: '1',
     name: 'Premium Wireless Headphones',
@@ -24,7 +25,7 @@ export const mockProducts: Product[] = [
     stock: 30,
     ratings: 4.7,
     reviewCount: 89,
-    location: { lat: 17.4485, lng: 78.3908, name: 'Gachibowli, Hyderabad' },
+    location: { lat: 17.4399, lng: 78.4983, name: 'Secunderabad' },
   },
   {
     id: '3',
@@ -36,7 +37,7 @@ export const mockProducts: Product[] = [
     stock: 15,
     ratings: 4.8,
     reviewCount: 56,
-    location: { lat: 17.4399, lng: 78.4983, name: 'Secunderabad' },
+    location: { lat: 17.4485, lng: 78.3908, name: 'Gachibowli' },
   },
   {
     id: '4',
@@ -49,7 +50,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-15',
     ratings: 4.9,
     reviewCount: 234,
-    location: { lat: 17.2403, lng: 78.4294, name: 'Shamshabad, Hyderabad' },
+    location: { lat: 17.4126, lng: 78.4730, name: 'Banjara Hills' },
   },
   {
     id: '5',
@@ -61,7 +62,7 @@ export const mockProducts: Product[] = [
     stock: 60,
     ratings: 4.6,
     reviewCount: 178,
-    location: { lat: 17.4944, lng: 78.3908, name: 'HITEC City, Hyderabad' },
+    location: { lat: 17.4240, lng: 78.4489, name: 'Ameerpet' },
   },
   {
     id: '6',
@@ -73,8 +74,9 @@ export const mockProducts: Product[] = [
     stock: 120,
     ratings: 4.4,
     reviewCount: 312,
-    location: { lat: 17.4126, lng: 78.4730, name: 'Banjara Hills, Hyderabad' },
+    location: { lat: 17.3616, lng: 78.4747, name: 'Charminar Area' },
   },
+  // 20-40 km range from Hyderabad
   {
     id: '7',
     name: 'Minimalist Backpack',
@@ -86,7 +88,7 @@ export const mockProducts: Product[] = [
     availabilityDate: '2025-12-25',
     ratings: 4.5,
     reviewCount: 95,
-    location: { lat: 17.3616, lng: 78.4747, name: 'Charminar Area, Hyderabad' },
+    location: { lat: 17.4947, lng: 78.3998, name: 'Madhapur' },
   },
   {
     id: '8',
@@ -98,7 +100,7 @@ export const mockProducts: Product[] = [
     stock: 75,
     ratings: 4.7,
     reviewCount: 145,
-    location: { lat: 17.5520, lng: 78.5718, name: 'Kompally, Hyderabad' },
+    location: { lat: 17.4320, lng: 78.3990, name: 'Jubilee Hills' },
   },
   {
     id: '9',
@@ -110,7 +112,7 @@ export const mockProducts: Product[] = [
     stock: 45,
     ratings: 4.6,
     reviewCount: 267,
-    location: { lat: 17.4947, lng: 78.3998, name: 'Madhapur, Hyderabad' },
+    location: { lat: 17.3753, lng: 78.5270, name: 'LB Nagar' },
   },
   {
     id: '10',
@@ -122,7 +124,7 @@ export const mockProducts: Product[] = [
     stock: 200,
     ratings: 4.8,
     reviewCount: 489,
-    location: { lat: 17.3753, lng: 78.5270, name: 'LB Nagar, Hyderabad' },
+    location: { lat: 17.4580, lng: 78.4338, name: 'Kukatpally' },
   },
   {
     id: '11',
@@ -134,7 +136,7 @@ export const mockProducts: Product[] = [
     stock: 80,
     ratings: 4.5,
     reviewCount: 156,
-    location: { lat: 17.4320, lng: 78.3990, name: 'Jubilee Hills, Hyderabad' },
+    location: { lat: 17.4306, lng: 78.5476, name: 'Dilsukhnagar' },
   },
   {
     id: '12',
@@ -146,8 +148,9 @@ export const mockProducts: Product[] = [
     stock: 150,
     ratings: 4.3,
     reviewCount: 892,
-    location: { lat: 17.4860, lng: 78.3167, name: 'Miyapur, Hyderabad' },
+    location: { lat: 17.4030, lng: 78.5522, name: 'Habsiguda' },
   },
+  // 40-60 km range from Hyderabad
   {
     id: '13',
     name: 'Bluetooth Speaker Portable',
@@ -158,7 +161,7 @@ export const mockProducts: Product[] = [
     stock: 95,
     ratings: 4.7,
     reviewCount: 421,
-    location: { lat: 17.5645, lng: 78.5389, name: 'Medchal, Hyderabad' },
+    location: { lat: 17.4860, lng: 78.3167, name: 'Miyapur' },
   },
   {
     id: '14',
@@ -170,7 +173,7 @@ export const mockProducts: Product[] = [
     stock: 180,
     ratings: 4.6,
     reviewCount: 334,
-    location: { lat: 17.3704, lng: 78.5565, name: 'Uppal, Hyderabad' },
+    location: { lat: 17.3704, lng: 78.5565, name: 'Uppal' },
   },
   {
     id: '15',
@@ -182,7 +185,7 @@ export const mockProducts: Product[] = [
     stock: 40,
     ratings: 4.8,
     reviewCount: 278,
-    location: { lat: 17.4306, lng: 78.5476, name: 'Dilsukhnagar, Hyderabad' },
+    location: { lat: 17.4900, lng: 78.5500, name: 'Alwal' },
   },
   {
     id: '16',
@@ -194,7 +197,7 @@ export const mockProducts: Product[] = [
     stock: 120,
     ratings: 4.5,
     reviewCount: 189,
-    location: { lat: 17.4030, lng: 78.5522, name: 'Habsiguda, Hyderabad' },
+    location: { lat: 17.3050, lng: 78.4600, name: 'Rajendranagar' },
   },
   {
     id: '17',
@@ -206,7 +209,7 @@ export const mockProducts: Product[] = [
     stock: 85,
     ratings: 4.4,
     reviewCount: 567,
-    location: { lat: 17.4900, lng: 78.5500, name: 'Alwal, Hyderabad' },
+    location: { lat: 17.4580, lng: 78.5300, name: 'Tarnaka' },
   },
   {
     id: '18',
@@ -218,8 +221,9 @@ export const mockProducts: Product[] = [
     stock: 65,
     ratings: 4.7,
     reviewCount: 245,
-    location: { lat: 17.3050, lng: 78.4600, name: 'Rajendranagar, Hyderabad' },
+    location: { lat: 17.4420, lng: 78.3530, name: 'Kondapur' },
   },
+  // 60-80 km range from Hyderabad
   {
     id: '19',
     name: 'Electric Kettle',
@@ -230,7 +234,7 @@ export const mockProducts: Product[] = [
     stock: 110,
     ratings: 4.6,
     reviewCount: 412,
-    location: { lat: 17.4240, lng: 78.4489, name: 'Ameerpet, Hyderabad' },
+    location: { lat: 17.5520, lng: 78.5718, name: 'Kompally' },
   },
   {
     id: '20',
@@ -242,7 +246,7 @@ export const mockProducts: Product[] = [
     stock: 55,
     ratings: 4.8,
     reviewCount: 198,
-    location: { lat: 17.4700, lng: 78.5800, name: 'Sainikpuri, Hyderabad' },
+    location: { lat: 17.2403, lng: 78.4294, name: 'Shamshabad' },
   },
   {
     id: '21',
@@ -254,7 +258,7 @@ export const mockProducts: Product[] = [
     stock: 140,
     ratings: 4.5,
     reviewCount: 324,
-    location: { lat: 17.4580, lng: 78.4338, name: 'Kukatpally, Hyderabad' },
+    location: { lat: 17.4700, lng: 78.5800, name: 'Sainikpuri' },
   },
   {
     id: '22',
@@ -266,7 +270,7 @@ export const mockProducts: Product[] = [
     stock: 250,
     ratings: 4.7,
     reviewCount: 678,
-    location: { lat: 17.3310, lng: 78.5510, name: 'Vanasthalipuram, Hyderabad' },
+    location: { lat: 17.3310, lng: 78.5510, name: 'Vanasthalipuram' },
   },
   {
     id: '23',
@@ -278,7 +282,7 @@ export const mockProducts: Product[] = [
     stock: 90,
     ratings: 4.4,
     reviewCount: 456,
-    location: { lat: 17.3500, lng: 78.4500, name: 'Mehdipatnam, Hyderabad' },
+    location: { lat: 17.4125, lng: 78.5050, name: 'Malakpet' },
   },
   {
     id: '24',
@@ -290,8 +294,9 @@ export const mockProducts: Product[] = [
     stock: 70,
     ratings: 4.9,
     reviewCount: 891,
-    location: { lat: 17.5200, lng: 78.4450, name: 'Nizampet, Hyderabad' },
+    location: { lat: 17.5200, lng: 78.4450, name: 'Nizampet' },
   },
+  // 80-100 km range from Hyderabad
   {
     id: '25',
     name: 'Wireless Earbuds Pro',
@@ -302,7 +307,7 @@ export const mockProducts: Product[] = [
     stock: 100,
     ratings: 4.8,
     reviewCount: 723,
-    location: { lat: 17.2800, lng: 78.4860, name: 'Kothur, Hyderabad' },
+    location: { lat: 17.5645, lng: 78.5389, name: 'Medchal' },
   },
   {
     id: '26',
@@ -314,7 +319,7 @@ export const mockProducts: Product[] = [
     stock: 80,
     ratings: 4.7,
     reviewCount: 234,
-    location: { lat: 17.4580, lng: 78.5300, name: 'Tarnaka, Hyderabad' },
+    location: { lat: 17.6020, lng: 78.5800, name: 'Shamirpet' },
   },
   {
     id: '27',
@@ -326,7 +331,7 @@ export const mockProducts: Product[] = [
     stock: 60,
     ratings: 4.9,
     reviewCount: 456,
-    location: { lat: 17.4125, lng: 78.5050, name: 'Malakpet, Hyderabad' },
+    location: { lat: 17.2800, lng: 78.4860, name: 'Kothur' },
   },
   {
     id: '28',
@@ -338,7 +343,7 @@ export const mockProducts: Product[] = [
     stock: 150,
     ratings: 4.6,
     reviewCount: 678,
-    location: { lat: 17.4030, lng: 78.4420, name: 'Tolichowki, Hyderabad' },
+    location: { lat: 17.4030, lng: 78.4420, name: 'Tolichowki' },
   },
   {
     id: '29',
@@ -350,7 +355,7 @@ export const mockProducts: Product[] = [
     stock: 95,
     ratings: 4.8,
     reviewCount: 1234,
-    location: { lat: 17.6020, lng: 78.5800, name: 'Shamirpet, Hyderabad' },
+    location: { lat: 17.3500, lng: 78.4500, name: 'Mehdipatnam' },
   },
   {
     id: '30',
@@ -362,7 +367,7 @@ export const mockProducts: Product[] = [
     stock: 180,
     ratings: 4.5,
     reviewCount: 567,
-    location: { lat: 17.4420, lng: 78.3530, name: 'Kondapur, Hyderabad' },
+    location: { lat: 17.4944, lng: 78.3908, name: 'HITEC City' },
   },
 ];
 
