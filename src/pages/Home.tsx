@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 export default function Home() {
   const navigate = useNavigate();
   const [allRetailerProducts, setAllRetailerProducts] = useState<Product[]>([]);
+  const [retailerOnlyProducts, setRetailerOnlyProducts] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -33,10 +34,12 @@ export default function Home() {
       setUserLocation(`${lat.toFixed(2)}, ${lng.toFixed(2)}`);
     }
 
-    // Load all retailer products for customers to see
+    // Load retailer products separately
     const retailerProducts = localStorage.getItem('retailer_products');
     const loadedProducts = retailerProducts ? JSON.parse(retailerProducts) : [];
-    // Always include mock products
+    setRetailerOnlyProducts(loadedProducts);
+    
+    // Combine mock products with retailer products for main grid
     setAllRetailerProducts([...mockProducts, ...loadedProducts]);
     setProducts([...mockProducts, ...loadedProducts]);
   }, []);
@@ -155,6 +158,94 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Retailer Products Section */}
+      {retailerOnlyProducts.length > 0 && (
+        <section className="py-12 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold mb-2">Products from Our Retailers</h2>
+              <p className="text-muted-foreground">Discover unique products from local retailers</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {retailerOnlyProducts.slice(0, 8).map((product: any) => (
+                <Card
+                  key={product.id}
+                  className="group hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden border-primary/20"
+                  onClick={() => navigate(`/product/${product.id}`)}
+                >
+                  <div className="aspect-square overflow-hidden bg-secondary relative">
+                    <Badge className="absolute top-2 right-2 z-10" variant="secondary">
+                      Retailer
+                    </Badge>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <Badge variant="outline" className="text-xs">
+                        {product.category}
+                      </Badge>
+                      {product.stock === 0 && (
+                        <Badge variant="destructive" className="text-xs">
+                          Out of Stock
+                        </Badge>
+                      )}
+                    </div>
+                    <h3 className="font-semibold mb-2 line-clamp-1">{product.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {product.description}
+                    </p>
+                    <div className="flex items-center gap-1 mb-3">
+                      <Star className="h-4 w-4 fill-warning text-warning" />
+                      <span className="text-sm font-medium">{product.ratings || 0}</span>
+                      <span className="text-xs text-muted-foreground">
+                        ({product.reviewCount || 0})
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-primary">
+                        ${product.price.toFixed(2)}
+                      </span>
+                      {product.stock > 0 && (
+                        <span className="text-xs text-muted-foreground">
+                          {product.stock} in stock
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0">
+                    <Button
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                      disabled={product.stock === 0}
+                    >
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
+            
+            {retailerOnlyProducts.length > 8 && (
+              <div className="text-center mt-8">
+                <p className="text-sm text-muted-foreground">
+                  Showing 8 of {retailerOnlyProducts.length} retailer products. 
+                  Scroll down to see all products with filters.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Filters Section */}
       <section className="border-b bg-card">
