@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,9 +10,11 @@ import { UserRole } from '@/types';
 import { storage } from '@/lib/storage';
 import { toast } from 'sonner';
 import { Store } from 'lucide-react';
+import { initiateGoogleLogin, getCurrentUser, completeProfile } from '@/lib/api';
 
 export default function Auth() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -22,6 +24,56 @@ export default function Auth() {
   const [otpSent, setOtpSent] = useState(false);
   const [showRoleSelection, setShowRoleSelection] = useState(false);
   const [tempGoogleUser, setTempGoogleUser] = useState<any>(null);
+  const [isLoadingGoogleAuth, setIsLoadingGoogleAuth] = useState(false);
+
+  // Check for Google OAuth callback
+  useEffect(() => {
+    const googleAuthSuccess = searchParams.get('google_auth');
+    const error = searchParams.get('error');
+
+    if (error) {
+      toast.error(`Authentication failed: ${error}`);
+      return;
+    }
+
+    if (googleAuthSuccess === 'success') {
+      // User has completed Google OAuth, now fetch their profile
+      handleGoogleAuthCallback();
+    }
+  }, [searchParams]);
+
+  const handleGoogleAuthCallback = async () => {
+    setIsLoadingGoogleAuth(true);
+    try {
+      const { user } = await getCurrentUser();
+      
+      if (user) {
+        // Check if user already has a role (returning user)
+        if (user.role) {
+          // Save to storage and navigate to home
+          storage.setUser({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+          });
+          toast.success('Welcome back!');
+          requestLocationAccess();
+        } else {
+          // New user - show role selection
+          setTempGoogleUser(user);
+          setShowRoleSelection(true);
+        }
+      } else {
+        toast.error('Failed to fetch user profile');
+      }
+    } catch (error) {
+      console.error('Error handling Google auth callback:', error);
+      toast.error('Failed to complete authentication');
+    } finally {
+      setIsLoadingGoogleAuth(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,13 +104,8 @@ export default function Auth() {
   };
 
   const handleGoogleLogin = () => {
-    // Mock Google OAuth - show role selection
-    setTempGoogleUser({
-      id: Math.random().toString(36).substr(2, 9),
-      name: 'Google User',
-      email: 'user@gmail.com',
-    });
-    setShowRoleSelection(true);
+    // Initiate real Google OAuth flow
+    initiateGoogleLogin();
   };
 
   const handleFacebookLogin = () => {
@@ -71,13 +118,25 @@ export default function Auth() {
     setShowRoleSelection(true);
   };
 
-  const handleRoleSelect = () => {
-    const user = {
-      ...tempGoogleUser,
-      role,
-    };
-    storage.setUser(user);
-    requestLocationAccess();
+  const handleRoleSelect = async () => {
+    try {
+      // Send role to backend
+      const { user } = await completeProfile(role);
+      
+      // Save to storage
+      storage.setUser({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      });
+      
+      toast.success('Profile completed!');
+      requestLocationAccess();
+    } catch (error) {
+      console.error('Error completing profile:', error);
+      toast.error('Failed to save role. Please try again.');
+    }
   };
 
   const requestLocationAccess = () => {
@@ -117,7 +176,12 @@ export default function Auth() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {showRoleSelection ? (
+          {isLoadingGoogleAuth ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-sm text-muted-foreground">Completing authentication...</p>
+            </div>
+          ) : showRoleSelection ? (
             <div className="space-y-4">
               <div className="text-center mb-4">
                 <h3 className="font-semibold text-lg">Select Your Account Type</h3>
