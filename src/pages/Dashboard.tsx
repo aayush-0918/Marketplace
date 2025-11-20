@@ -17,6 +17,10 @@ export default function Dashboard() {
   useEffect(() => {
     if (!user) {
       navigate('/auth');
+    } else if (user.role === 'retailer') {
+      navigate('/retailer-dashboard');
+    } else if (user.role === 'wholesaler') {
+      navigate('/wholesaler-dashboard');
     }
   }, [user, navigate]);
 
